@@ -15,6 +15,21 @@ variable "region" {
   type = string
   description = "the value of region"
 }
+variable "ibm-activity-tracker_tags" {
+  type = string
+  description = "Tags that should be applied to the service"
+  default = "[]"
+}
+variable "ibm-activity-tracker_plan" {
+  type = string
+  description = "The type of plan the service instance should run under (lite, 7-day, 14-day, or 30-day)"
+  default = "7-day"
+}
+variable "ibm-activity-tracker_sync" {
+  type = string
+  description = "Value used to order the provisioning of the instance"
+  default = ""
+}
 variable "name_prefix" {
   type = string
   description = "The prefix name for the service. If not provided it will default to the resource group name"
