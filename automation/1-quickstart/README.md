@@ -8,58 +8,80 @@ Automation to provision the Quick Start reference architecture on IBM Cloud. Thi
 
 The automation is delivered in a number of layers that are applied in order. Layer `110` provisions the infrastructure including the Red Hat OpenShift cluster and the remaining layers provide configuration inside the cluster. Each layer depends on resources provided in the layer before it (e.g. `200` depends on `110`). Where two layers have the same numbers (e.g. `205`), you have a choice of which layer to apply.
 
-### 110 - VPC OpenShift
-
-This layer provisions the bulk of the IBM Cloud infrastructure. The following cloud resources are provisioned:
-
-#### Network
-
-- VPC network
-- VPC Subnet
-- VPC Public Gateways
-- Red Hat OpenShift cluster
-
-#### Shared Services
-
-- Object Storage
-- IBM Log Analysis
-- IBM Cloud Monitoring
-
-### 200 - ArgoCD Bootstrap
-
-#### Software
-
-- OpenShift GitOps (ArgoCD)
-- OpenShift Pipelines (Tekton)
-- Sealed Secrets (Kubeseal)
-- GitOps repo
-
-### 205 - Storage
-
-The storage layer offers two options: `odf` and `portworx`. Either odf or portworx storage can be installed (or in rare instances, both).
-
-#### ODF
-
-- ODF operator
-- ODF storage classes
-
-#### Portworx
-
-- IBM Cloud storage volumes
-- Portworx operator
-- Portworx storage classes
-
-### 220 - Dev Tools
-
-The dev tools layer installs standard continuous integration (CI) pipelines that integrate with tools that support the software development lifecycle. 
-
-#### Software
-
-- Artifactory
-- Developer Dashboard
-- Pact Broker
-- Sonarqube
-- Tekton Resources
+<table>
+<thead>
+<tr>
+<th>Layer name</th>
+<th>Layer description</th>
+<th>Provided resources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>110 - VPC OpenShift</td>
+<td>This layer provisions the bulk of the IBM Cloud infrastructure</td>
+<td>
+<h4>Network</h4>
+<ul>
+<li>VPC network</li>
+<li>VPC Subnet</li>
+<li>VPC Public Gateways</li>
+<li>Red Hat OpenShift cluster</li>
+</ul>
+<h4>Shared Services</h4>
+<ul>
+<li>Object Storage</li>
+<li>IBM Log Analysis</li>
+<li>IBM Cloud Monitoring</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>200 - ArgoCD Bootstrap</td>
+<td>This layer provisions OpenShift CI/CD tools into the cluster, a GitOps repository, and bootstraps the repository to the OpenShift Gitops instance.</td>
+<td>
+<h4>Software</h4>
+<ul>
+<li>OpenShift GitOps (ArgoCD)</li>
+<li>OpenShift Pipelines (Tekton)</li>
+<li>Sealed Secrets (Kubeseal)</li>
+<li>GitOps repo</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>205 - Storage</td>
+<td>The storage layer offers two options: `odf` and `portworx`. Either odf or portworx storage can be installed (or in rare instances, both).</td>
+<td>
+<h4>ODF</h4>
+<ul>
+<li>ODF operator</li>
+<li>ODF storage classes</li>
+</ul>
+<h4>Portworx</h4>
+<ul>
+<li>IBM Cloud storage volumes</li>
+<li>Portworx operator</li>
+<li>Portworx storage classes</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td>220 - Dev Tools</td>
+<td>The dev tools layer installs standard continuous integration (CI) pipelines that integrate with tools that support the software development lifecycle.</td>
+<td>
+<h4>Software</h4>
+<ul>
+<li>Artifactory</li>
+<li>Developer Dashboard</li>
+<li>Pact Broker</li>
+<li>Sonarqube</li>
+<li>Tekton Resources</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 
 ## Automation
 
@@ -77,19 +99,19 @@ The dev tools layer installs standard continuous integration (CI) pipelines that
 ### Setup
 
 1. Clone this repository to your local SRE laptop or into a secure terminal. Open a shell into the cloned directory.
-2. Copy `credentials.template` to `credentials.properties`.
-3. Provide your IBM Cloud API key as the value for the `TF_VAR_ibmcloud_api_key` variable in `credentials.properties` (**Note:** `*.properties` has been added to `.gitignore` to ensure that the file containing the apikey cannot be checked into Git.)
-4. Run `./launch.sh`. This will start a container image with the prompt opened in the `/terraform` directory.
-5. Create a working copy of the terraform by running `./setup-workspace.sh`. Select `1` to set up the workspace for Quick Start. The script makes a copy of the terraform in `/workspaces/current` and sets up an empty `terraform.tfvars` file.
-6. Change the directory to the subdirectory for the layer (e.g. `/workspaces/current`).
+2. Copy **credentials.template** to **credentials.properties**.
+3. Provide your IBM Cloud API key as the value for the `TF_VAR_ibmcloud_api_key` variable in **credentials.properties** (**Note:** `*.properties` has been added to `.gitignore` to ensure that the file containing the apikey cannot be checked into Git.)
+4. Run `./launch.sh`. This will start a container image with the prompt opened in the **/terraform** directory.
+5. Create a working copy of the terraform by running `./setup-workspace.sh`. Select "1" to set up the workspace for Quick Start. The script makes a copy of the terraform in **/workspaces/current** and sets up an empty **terraform.tfvars** file.
+6. Change the directory to the subdirectory to the workspace that was just created - `cd /workspaces/current`
 
 ### Running each layer of automation sequentially
 
 #### Configuration values
 
-Configuration values need to be provided to terraform when the script is run. If not provided in advance, the terraform cli will prompt for them. However to ensure the automation is applied consistently at each layer, we highly recommend providing the values in a configuration file up front.
+Configuration values need to be provided to terraform when the script is run. If not provided in advance, the terraform cli will prompt for them. However, to ensure the automation is applied consistently at each layer we highly recommend providing the values in a configuration file up front.
 
-1. Uncomment and provide a value for each of the variables in `/workspaces/current/terraform.tfvars`. The `/workspaces/current/terraform.tfvars` file is shared between different terraform layers via a soft link so the values only need to be provided in one place.
+1. Uncomment and provide a value for each of the variables in **/workspaces/current/terraform.tfvars**. The **/workspaces/current/terraform.tfvars** file is shared between different terraform layers via a soft link so the values only need to be provided in one place.
 2. At a minimum, the following values should be provided:
 
 | Variable               | Description                                                            |
@@ -106,8 +128,9 @@ Configuration values need to be provided to terraform when the script is run. If
 | gitops_repo_type       | The type of the gitops repo (e.g. github)                              |
 | gitops_repo_org        | The existing org/group where the gitops repo will be created/found     |
 | gitops_repo_repo       | The name for the gitops repo                                           |
-| gitops_repo_username   | The username that will be used to access the gitops repo               |
 | odf_namespace_name     | The namespace where the odf resource should be deployed                |
+
+**Note:** The `ibmcloud_api_key`, `gitops_repo_username` and `gitops_repo_token` variables should have been provided in the **credentials.properties** file and provided as environment variables into the container. If you are not running in a container, you can add the variables in the terraform.tfvars file or provide them when prompted.
 
 #### 110 - VPC OpenShift
 
@@ -154,7 +177,6 @@ This layer makes use of the following variables:
 | gitops_repo_type       | The type of the gitops repo (e.g. github)                              |
 | gitops_repo_org        | The existing org/group where the gitops repo will be created/found     |
 | gitops_repo_repo       | The name for the gitops repo                                           |
-| gitops_repo_username   | The username that will be used to access the gitops repo               |
 
 #### 205 - Storage
 
@@ -181,7 +203,6 @@ This layer makes use of the following variables:
 | gitops_repo_type       | The type of the gitops repo (e.g. github)                              |
 | gitops_repo_org        | The existing org/group where the gitops repo will be created/found     |
 | gitops_repo_repo       | The name for the gitops repo                                           |
-| gitops_repo_username   | The username that will be used to access the gitops repo               |
 
 ##### 205 - Portworx Storage
 
@@ -219,4 +240,3 @@ This layer makes use of the following variables:
 | gitops_repo_type     | The type of the gitops repo (e.g. github)                          |
 | gitops_repo_org      | The existing org/group where the gitops repo will be created/found |
 | gitops_repo_repo     | The name for the gitops repo                                       |
-| gitops_repo_username | The username that will be used to access the gitops repo           |

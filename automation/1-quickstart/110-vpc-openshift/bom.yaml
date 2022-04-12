@@ -13,7 +13,7 @@ spec:
   modules:
     - name: ibm-resource-group
       alias: resource_group
-      version: v3.2.2
+      version: v3.2.10
     - name: ibm-access-group
       alias: ibm-access-group
       version: v3.0.2
@@ -22,13 +22,13 @@ spec:
       version: v4.1.2
     - name: ibm-cloud-monitoring-bind
       alias: sysdig-bind
-      version: v1.3.2
+      version: v1.3.3
     - name: ibm-log-analysis
       alias: logdna
       version: v4.1.2
     - name: ibm-log-analysis-bind
       alias: ibm-logdna-bind
-      version: v1.3.2
+      version: v1.3.3
     - name: ibm-vpc
       alias: ibm-vpc
       version: v1.15.5
@@ -41,7 +41,7 @@ spec:
       default: true
     - name: ibm-ocp-vpc
       alias: cluster
-      version: v1.13.1
+      version: v1.13.2
       variables:
         - name: flavor
           value: bx2.16x64
@@ -55,11 +55,12 @@ spec:
       alias: cos
       version: v4.0.3
   variables:
+    - name: ibmcloud_api_key
+      type: string
+      description: The IBM Cloud api key
     - name: resource_group_name
       type: string
       description: The name of the resource group
-    - name: ibmcloud_api_key
-      type: string
     - name: region
       type: string
     - name: name_prefix

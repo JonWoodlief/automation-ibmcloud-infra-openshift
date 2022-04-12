@@ -1,5 +1,5 @@
 module "argocd-bootstrap" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-argocd-bootstrap?ref=v1.6.3"
+  source = "github.com/cloud-native-toolkit/terraform-tools-argocd-bootstrap?ref=v1.6.5"
 
   bootstrap_path = module.gitops_repo.bootstrap_path
   bootstrap_prefix = var.argocd-bootstrap_bootstrap_prefix
@@ -17,7 +17,7 @@ module "argocd-bootstrap" {
 }
 module "cluster" {
   source = "cloud-native-toolkit/ocp-vpc/ibm"
-  version = "1.13.1"
+  version = "1.13.2"
 
   cos_id = var.cluster_cos_id
   disable_public_endpoint = var.cluster_disable_public_endpoint
@@ -55,14 +55,12 @@ module "config" {
   server_name = module.gitops_repo.server_name
 }
 module "gitops_repo" {
-  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.15.2"
+  source = "github.com/cloud-native-toolkit/terraform-tools-gitops?ref=v1.15.3"
 
   branch = var.gitops_repo_branch
   gitops_namespace = var.gitops_repo_gitops_namespace
   host = var.gitops_repo_host
-  initialize = var.gitops_repo_initialize
   org = var.gitops_repo_org
-  provision = var.gitops_repo_provision
   public = var.gitops_repo_public
   repo = var.gitops_repo_repo
   sealed_secrets_cert = module.sealed-secret-cert.cert
@@ -89,9 +87,9 @@ module "olm" {
 }
 module "resource_group" {
   source = "cloud-native-toolkit/resource-group/ibm"
-  version = "3.2.2"
+  version = "3.2.10"
 
-  provision = var.resource_group_provision
+  ibmcloud_api_key = var.ibmcloud_api_key
   resource_group_name = var.resource_group_name
   sync = var.resource_group_sync
 }

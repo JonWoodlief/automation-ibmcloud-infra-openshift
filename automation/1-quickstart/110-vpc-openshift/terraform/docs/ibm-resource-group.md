@@ -10,7 +10,7 @@ The module depends on the following software components:
 
 ### Command-line tools
 
-- terraform - v13
+- terraform - v0.13
 
 ### Terraform providers
 
@@ -42,16 +42,10 @@ variable "ibmcloud_api_key" {
   description = "IBM Cloud API Key"
 }
 
-variable "resource_group_provision" {
-  type        = bool
-  description = "Flag indicating that the resource group should be provisioned"
-  default     = true
-}
-
 module "resource_group" {
   source = "cloud-native-toolkit/resource-group/ibm"
 
   resource_group_name = var.resource_group_name
-  provision           = var.resource_group_provision
+  ibmcloud_api_key    = var.ibmcloud_api_key
 }
 ```

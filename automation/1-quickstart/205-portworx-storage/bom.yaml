@@ -11,13 +11,17 @@ metadata:
     description: Installs Portworx in cluster
 spec:
   modules:
+    - name: ibm-resource-group
+      alias: resource_group
+      version: v3.2.10
+      variables:
+        - name: provision
+          value: false
     - name: ibm-ocp-vpc
       alias: cluster
-      version: v1.13.1
+      version: v1.13.2
       dependencies:
         - name: cos
-          optional: true
-        - name: subnets
           optional: true
       variables:
         - name: exists
@@ -33,14 +37,6 @@ spec:
           value: ''
           important: false
           optional: true
-        - name: vpc_subnet_count
-          important: false
-          optional: true
-          value: 0
-        - name: vpc_subnets
-          important: false
-          optional: true
-          value: []
         - name: cos_id
           important: false
           optional: true
@@ -55,20 +51,33 @@ spec:
         - name: etcd_secret_name
           optional: true
           value: px-etcd-certs
-    - name: ibm-resource-group
-      alias: resource_group
-      version: v3.2.2
+    - name: ibm-vpc
+      alias: ibm-vpc
+      version: v1.15.5
+      variables:
+        - name: provision
+          value: false
+    - name: ibm-vpc-subnets
+      alias: cluster_subnets
+      version: v1.12.2
+      default: true
+      variables:
+        - name: provision
+          value: false
   variables:
-    - name: region
-      type: string
-      description: The IBM Cloud region where the cluster will be/has been installed.
     - name: ibmcloud_api_key
       type: string
-      description: The IBM Cloud api token
+      description: The IBM Cloud api key
+    - name: resource_group_name
+      type: string
+      description: The name of the resource group
+    - name: region
+      type: string
     - name: cluster_name
       type: string
       description: The cluster where Portworx storage will be deployed.
       defaultValue: ''
-    - name: resource_group_name
-      type: string
-      description: The name of the resource group
+    - name: cluster_subnets__count
+      type: number
+      description: The number of subnets that should be provisioned
+      defaultValue: 3
