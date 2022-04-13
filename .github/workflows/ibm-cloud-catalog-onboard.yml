@@ -1,0 +1,132 @@
+# Controls when the workflow will run
+on:
+  
+  push:
+    tags:
+    - 'v*' # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "onbaord-release"
+  onboard-release:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Extracts the offering version number from the tag
+      - name: Determine version 
+        run: echo "VERSION=$(echo ${{ github.ref_name }} | cut -c2-)" >> $GITHUB_ENV
+
+      # For debugging - echo all the environment variables in sorted order
+      - name: Dump environment
+        run: env | sort
+
+      # For debugging - echo the git context and all properties
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      # Create the tar.gz file that will be uploaded to the release and catalog
+      - name: Create release asset for 200-argocd-bootstrap
+        run: |
+          ls
+          echo 'creating asset for 200-argocd-bootstrap - ${{ github.ref_name }}-200-argocd-bootstrap.tar.gz'
+          cd automation/1-quickstart/200-argocd-bootstrap/terraform
+          cp ../../README.md .
+          tar -czvf ../${{ github.ref_name }}-200-argocd-bootstrap.tar.gz .
+          echo 'done creating asset for 200-argocd-bootstrap module'
+
+      # Create the tar.gz file that will be uploaded to the release and catalog
+      - name: Create release asset for 205-odf-storage
+        run: |
+          ls
+          echo 'creating asset for 205-odf-storage - ${{ github.ref_name }}-205-odf-storage.tar.gz'
+          cd automation/1-quickstart/205-odf-storage/terraform
+          cp ../../README.md .
+          tar -czvf ../${{ github.ref_name }}-205-odf-storage.tar.gz .
+          echo 'done creating asset for 205-odf-storage module'
+
+      # Create the tar.gz file that will be uploaded to the release and catalog
+      - name: Create release asset for 205-portworx-storage
+        run: |
+          ls
+          echo 'creating asset for 205-portworx-storage - ${{ github.ref_name }}-205-portworx-storage.tar.gz'
+          cd automation/1-quickstart/205-portworx-storage/terraform
+          cp ../../README.md .
+          tar -czvf ../${{ github.ref_name }}-205-portworx-storage.tar.gz .
+          echo 'done creating asset for 205-portworx-storage module'
+
+      # Create the tar.gz file that will be uploaded to the release and catalog
+      - name: Create release asset for 220-dev-tools
+        run: |
+          ls
+          echo 'creating asset for 220-dev-tools - ${{ github.ref_name }}-220-dev-tools.tar.gz'
+          cd automation/1-quickstart/220-dev-tools/terraform
+          cp ../../README.md .
+          tar -czvf ../${{ github.ref_name }}-220-dev-tools.tar.gz .
+          echo 'done creating asset for 220-dev-tools module'
+
+      # Create the release in the repo
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ""
+          draft: true
+          prerelease: false
+
+      # Upload a release asset to the repo on the release
+      - name: Upload Release Asset - 200-argocd-bootstrap
+        id: 200-argocd-bootstrap-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./200-argocd-bootstrap/${{ github.ref_name }}-200-argocd-bootstrap.tar.gz
+          asset_name: ${{ github.ref_name }}-200-argocd-bootstrap.tar.gz
+          asset_content_type: application/octet-stream
+
+      # Upload a release asset to the repo on the release
+      - name: Upload Release Asset - 205-odf-storage
+        id: 205-odf-storage-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./205-odf-storage/${{ github.ref_name }}-205-odf-storage.tar.gz
+          asset_name: ${{ github.ref_name }}-205-odf-storage.tar.gz
+          asset_content_type: application/octet-stream  
+
+      # Upload a release asset to the repo on the release
+      - name: Upload Release Asset - 205-portworx-storage
+        id: 205-portworx-storage-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./205-portworx-storage/${{ github.ref_name }}-205-portworx-storage.tar.gz
+          asset_name: ${{ github.ref_name }}-205-portworx-storage.tar.gz
+          asset_content_type: application/octet-stream
+
+      # Upload a release asset to the repo on the release
+      - name: Upload Release Asset - 220-dev-tools
+        id: 220-dev-tools-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./220-dev-tools/${{ github.ref_name }}-220-dev-tools-storage.tar.gz
+          asset_name: ${{ github.ref_name }}-220-dev-tools.tar.gz
+          asset_content_type: application/octet-stream                     
