@@ -121,12 +121,12 @@ jobs:
 
       # Upload a release asset to the repo on the release
       - name: Upload Release Asset - 220-dev-tools
-        id: dev-tools-asset-205 
+        id: dev-tools-asset-220
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./automation/1-quickstart/220-dev-tools/${{ github.ref_name }}-220-dev-tools-storage.tar.gz
+          asset_path: ./automation/1-quickstart/220-dev-tools/${{ github.ref_name }}-220-dev-tools.tar.gz
           asset_name: ${{ github.ref_name }}-220-dev-tools.tar.gz
           asset_content_type: application/octet-stream                     
