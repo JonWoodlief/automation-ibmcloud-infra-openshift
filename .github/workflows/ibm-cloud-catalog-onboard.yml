@@ -91,7 +91,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./200-argocd-bootstrap/${{ github.ref_name }}-200-argocd-bootstrap.tar.gz
+          asset_path: ./automation/1-quickstart/200-argocd-bootstrap/${{ github.ref_name }}-200-argocd-bootstrap.tar.gz
           asset_name: ${{ github.ref_name }}-200-argocd-bootstrap.tar.gz
           asset_content_type: application/octet-stream
 
@@ -103,7 +103,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./205-odf-storage/${{ github.ref_name }}-205-odf-storage.tar.gz
+          asset_path: ./automation/1-quickstart/205-odf-storage/${{ github.ref_name }}-205-odf-storage.tar.gz
           asset_name: ${{ github.ref_name }}-205-odf-storage.tar.gz
           asset_content_type: application/octet-stream  
 
@@ -115,7 +115,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./205-portworx-storage/${{ github.ref_name }}-205-portworx-storage.tar.gz
+          asset_path: ./automation/1-quickstart/205-portworx-storage/${{ github.ref_name }}-205-portworx-storage.tar.gz
           asset_name: ${{ github.ref_name }}-205-portworx-storage.tar.gz
           asset_content_type: application/octet-stream
 
@@ -127,6 +127,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./220-dev-tools/${{ github.ref_name }}-220-dev-tools-storage.tar.gz
+          asset_path: ./automation/1-quickstart/220-dev-tools/${{ github.ref_name }}-220-dev-tools-storage.tar.gz
           asset_name: ${{ github.ref_name }}-220-dev-tools.tar.gz
           asset_content_type: application/octet-stream                     
