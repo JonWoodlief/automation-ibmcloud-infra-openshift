@@ -85,7 +85,7 @@ jobs:
 
       # Upload a release asset to the repo on the release
       - name: Upload Release Asset - 200-argocd-bootstrap
-        id: 200-argocd-bootstrap-asset 
+        id: argocd-bootstrap-asset-200 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -97,7 +97,7 @@ jobs:
 
       # Upload a release asset to the repo on the release
       - name: Upload Release Asset - 205-odf-storage
-        id: 205-odf-storage-asset 
+        id: odf-storage-asset-205 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -109,7 +109,7 @@ jobs:
 
       # Upload a release asset to the repo on the release
       - name: Upload Release Asset - 205-portworx-storage
-        id: 205-portworx-storage-asset 
+        id: portworx-storage-asset-205 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -121,7 +121,7 @@ jobs:
 
       # Upload a release asset to the repo on the release
       - name: Upload Release Asset - 220-dev-tools
-        id: 220-dev-tools-asset 
+        id: dev-tools-asset-205 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
