@@ -31,44 +31,44 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
       # Create the tar.gz file that will be uploaded to the release and catalog
-      - name: Create release asset for 105-vpc-openshift
+      - name: Create release asset for 105-ibm-vpc-openshift
         run: |
           ls
-          echo 'creating asset for 105-vpc-openshift - ${{ github.ref_name }}-105-vpc-openshift.tar.gz'
-          cd automation/1-quickstart/105-vpc-openshift/terraform
+          echo 'creating asset for 105-ibm-vpc-openshift - ${{ github.ref_name }}-105-ibm-vpc-openshift.tar.gz'
+          cd automation/1-quickstart/105-ibm-vpc-openshift/terraform
           cp ../../README.md .
-          tar -czvf ../${{ github.ref_name }}-105-vpc-openshift.tar.gz .
-          echo 'done creating asset for 105-vpc-openshift module'
+          tar -czvf ../${{ github.ref_name }}-105-ibm-vpc-openshift.tar.gz .
+          echo 'done creating asset for 105-ibm-vpc-openshift module'
 
       # Create the tar.gz file that will be uploaded to the release and catalog
-      - name: Create release asset for 200-argocd-bootstrap
+      - name: Create release asset for 200-ibm-openshift-gitops
         run: |
           ls
-          echo 'creating asset for 200-argocd-bootstrap - ${{ github.ref_name }}-200-argocd-bootstrap.tar.gz'
-          cd automation/1-quickstart/200-argocd-bootstrap/terraform
+          echo 'creating asset for 200-ibm-openshift-gitops - ${{ github.ref_name }}-200-ibm-openshift-gitops.tar.gz'
+          cd automation/1-quickstart/200-ibm-openshift-gitops/terraform
           cp ../../README.md .
-          tar -czvf ../${{ github.ref_name }}-200-argocd-bootstrap.tar.gz .
-          echo 'done creating asset for 200-argocd-bootstrap module'
+          tar -czvf ../${{ github.ref_name }}-200-ibm-openshift-gitops.tar.gz .
+          echo 'done creating asset for 200-ibm-openshift-gitops module'
 
       # Create the tar.gz file that will be uploaded to the release and catalog
-      - name: Create release asset for 205-odf-storage
+      - name: Create release asset for 210-ibm-odf-storage
         run: |
           ls
-          echo 'creating asset for 205-odf-storage - ${{ github.ref_name }}-205-odf-storage.tar.gz'
-          cd automation/1-quickstart/205-odf-storage/terraform
+          echo 'creating asset for 210-ibm-odf-storage - ${{ github.ref_name }}-210-ibm-odf-storage.tar.gz'
+          cd automation/1-quickstart/210-ibm-odf-storage/terraform
           cp ../../README.md .
-          tar -czvf ../${{ github.ref_name }}-205-odf-storage.tar.gz .
-          echo 'done creating asset for 205-odf-storage module'
+          tar -czvf ../${{ github.ref_name }}-210-ibm-odf-storage.tar.gz .
+          echo 'done creating asset for 210-ibm-odf-storage module'
 
       # Create the tar.gz file that will be uploaded to the release and catalog
-      - name: Create release asset for 205-portworx-storage
+      - name: Create release asset for 210-ibm-portworx-storage
         run: |
           ls
-          echo 'creating asset for 205-portworx-storage - ${{ github.ref_name }}-205-portworx-storage.tar.gz'
-          cd automation/1-quickstart/205-portworx-storage/terraform
+          echo 'creating asset for 210-ibm-portworx-storage - ${{ github.ref_name }}-210-ibm-portworx-storage.tar.gz'
+          cd automation/1-quickstart/210-ibm-portworx-storage/terraform
           cp ../../README.md .
-          tar -czvf ../${{ github.ref_name }}-205-portworx-storage.tar.gz .
-          echo 'done creating asset for 205-portworx-storage module'
+          tar -czvf ../${{ github.ref_name }}-210-ibm-portworx-storage.tar.gz .
+          echo 'done creating asset for 210-ibm-portworx-storage module'
 
       # Create the tar.gz file that will be uploaded to the release and catalog
       - name: Create release asset for 220-dev-tools
@@ -94,51 +94,51 @@ jobs:
           prerelease: false
 
       # Upload a release asset to the repo on the release
-      - name: Upload Release Asset - 105-vpc-openshift
-        id: vpc-openshift-105
+      - name: Upload Release Asset - 105-ibm-vpc-openshift
+        id: ibm-vpc-openshift-asset-105
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./automation/1-quickstart/105-vpc-openshift/${{ github.ref_name }}-105-vpc-openshift.tar.gz
-          asset_name: ${{ github.ref_name }}-105-vpc-openshift.tar.gz
+          asset_path: ./automation/1-quickstart/105-ibm-vpc-openshift/${{ github.ref_name }}-105-ibm-vpc-openshift.tar.gz
+          asset_name: ${{ github.ref_name }}-105-ibm-vpc-openshift.tar.gz
           asset_content_type: application/octet-stream
           
       # Upload a release asset to the repo on the release
-      - name: Upload Release Asset - 200-argocd-bootstrap
-        id: argocd-bootstrap-asset-200 
+      - name: Upload Release Asset - 200-ibm-openshift-gitops
+        id: ibm-openshift-gitops-asset-200 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./automation/1-quickstart/200-argocd-bootstrap/${{ github.ref_name }}-200-argocd-bootstrap.tar.gz
-          asset_name: ${{ github.ref_name }}-200-argocd-bootstrap.tar.gz
+          asset_path: ./automation/1-quickstart/200-ibm-openshift-gitops/${{ github.ref_name }}-200-ibm-openshift-gitops.tar.gz
+          asset_name: ${{ github.ref_name }}-200-ibm-openshift-gitops.tar.gz
           asset_content_type: application/octet-stream
 
       # Upload a release asset to the repo on the release
-      - name: Upload Release Asset - 205-odf-storage
-        id: odf-storage-asset-205 
+      - name: Upload Release Asset - 210-ibm-odf-storage
+        id: ibm-odf-storage-asset-210 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./automation/1-quickstart/205-odf-storage/${{ github.ref_name }}-205-odf-storage.tar.gz
-          asset_name: ${{ github.ref_name }}-205-odf-storage.tar.gz
+          asset_path: ./automation/1-quickstart/210-ibm-odf-storage/${{ github.ref_name }}-210-ibm-odf-storage.tar.gz
+          asset_name: ${{ github.ref_name }}-210-ibm-odf-storage.tar.gz
           asset_content_type: application/octet-stream  
 
       # Upload a release asset to the repo on the release
-      - name: Upload Release Asset - 205-portworx-storage
-        id: portworx-storage-asset-205 
+      - name: Upload Release Asset - 210-ibm-portworx-storage
+        id: ibm-portworx-storage-asset-210 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./automation/1-quickstart/205-portworx-storage/${{ github.ref_name }}-205-portworx-storage.tar.gz
-          asset_name: ${{ github.ref_name }}-205-portworx-storage.tar.gz
+          asset_path: ./automation/1-quickstart/210-ibm-portworx-storage/${{ github.ref_name }}-210-ibm-portworx-storage.tar.gz
+          asset_name: ${{ github.ref_name }}-210-ibm-portworx-storage.tar.gz
           asset_content_type: application/octet-stream
 
       # Upload a release asset to the repo on the release
