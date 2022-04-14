@@ -43,7 +43,7 @@ module "cluster_subnets" {
   zone_offset = var.cluster_subnets_zone_offset
 }
 module "ibm-portworx" {
-  source = "github.com/cloud-native-toolkit/terraform-ibm-portworx?ref=v1.0.4"
+  source = "github.com/cloud-native-toolkit/terraform-ibm-portworx?ref=v1.0.5"
 
   cluster_name = module.cluster.name
   create_external_etcd = var.ibm-portworx_create_external_etcd

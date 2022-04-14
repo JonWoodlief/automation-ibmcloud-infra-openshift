@@ -1,15 +1,16 @@
 apiVersion: cloud.ibm.com/v1alpha1
 kind: BillOfMaterial
 metadata:
-  name: 200-argocd-bootstrap
+  name: 200-ibm-openshift-gitops
   labels:
     type: software
+    platform: ibm
     code: '200'
   annotations:
-    displayName: ArgoCD Bootstrap
+    displayName: IBM OpenShift GitOps Bootstrap
     description: >-
-      Provisions ArgoCD into an existing cluster and bootstraps it to a gitops
-      repository
+      Provisions OpenShift GitOps into an existing IBM cluster and bootstraps it
+      to a gitops repository
 spec:
   modules:
     - name: gitops-repo

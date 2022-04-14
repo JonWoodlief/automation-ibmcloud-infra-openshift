@@ -54,12 +54,15 @@ module "cos" {
   resource_location = var.cos_resource_location
   tags = var.cos_tags == null ? null : jsondecode(var.cos_tags)
 }
-module "ibm-access-group" {
-  source = "cloud-native-toolkit/access-group/ibm"
-  version = "3.0.2"
+module "ibm-activity-tracker" {
+  source = "github.com/cloud-native-toolkit/terraform-ibm-activity-tracker?ref=v2.4.6"
 
-  provision = module.resource_group.provision
+  ibmcloud_api_key = var.ibmcloud_api_key
+  plan = var.ibm-activity-tracker_plan
   resource_group_name = module.resource_group.name
+  resource_location = var.region
+  sync = var.ibm-activity-tracker_sync
+  tags = var.ibm-activity-tracker_tags == null ? null : jsondecode(var.ibm-activity-tracker_tags)
 }
 module "ibm-logdna-bind" {
   source = "cloud-native-toolkit/log-analysis-bind/ibm"

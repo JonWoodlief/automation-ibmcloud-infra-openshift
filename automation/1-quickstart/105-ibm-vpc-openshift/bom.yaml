@@ -1,22 +1,22 @@
 apiVersion: cloud.ibm.com/v1alpha1
 kind: BillOfMaterial
 metadata:
-  name: 110-vpc-openshift
+  name: 105-ibm-vpc-openshift
   labels:
     type: infrastructure
     platform: ibm
-    code: '110'
+    code: '105'
   annotations:
-    displayName: IBM VPC OpenShift Quick Start
+    displayName: IBM VPC OpenShift
     description: IBM VPC and public Red Hat OpenShift server
 spec:
   modules:
     - name: ibm-resource-group
       alias: resource_group
       version: v3.2.10
-    - name: ibm-access-group
-      alias: ibm-access-group
-      version: v3.0.2
+    - name: ibm-activity-tracker
+      alias: ibm-activity-tracker
+      version: v2.4.6
     - name: ibm-cloud-monitoring
       alias: sysdig
       version: v4.1.2
