@@ -31,14 +31,14 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
       # Create the tar.gz file that will be uploaded to the release and catalog
-      - name: Create release asset for 110-vpc-openshift
+      - name: Create release asset for 105-vpc-openshift
         run: |
           ls
-          echo 'creating asset for 110-vpc-openshift - ${{ github.ref_name }}-110-vpc-openshift.tar.gz'
-          cd automation/1-quickstart/110-vpc-openshift/terraform
+          echo 'creating asset for 105-vpc-openshift - ${{ github.ref_name }}-105-vpc-openshift.tar.gz'
+          cd automation/1-quickstart/105-vpc-openshift/terraform
           cp ../../README.md .
-          tar -czvf ../${{ github.ref_name }}-110-vpc-openshift.tar.gz .
-          echo 'done creating asset for 110-vpc-openshift module'
+          tar -czvf ../${{ github.ref_name }}-105-vpc-openshift.tar.gz .
+          echo 'done creating asset for 105-vpc-openshift module'
 
       # Create the tar.gz file that will be uploaded to the release and catalog
       - name: Create release asset for 200-argocd-bootstrap
@@ -94,15 +94,15 @@ jobs:
           prerelease: false
 
       # Upload a release asset to the repo on the release
-      - name: Upload Release Asset - 110-vpc-openshift
-        id: vpc-openshift-110
+      - name: Upload Release Asset - 105-vpc-openshift
+        id: vpc-openshift-105
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./automation/1-quickstart/110-vpc-openshift/${{ github.ref_name }}-110-vpc-openshift.tar.gz
-          asset_name: ${{ github.ref_name }}-110-vpc-openshift.tar.gz
+          asset_path: ./automation/1-quickstart/105-vpc-openshift/${{ github.ref_name }}-105-vpc-openshift.tar.gz
+          asset_name: ${{ github.ref_name }}-105-vpc-openshift.tar.gz
           asset_content_type: application/octet-stream
           
       # Upload a release asset to the repo on the release
