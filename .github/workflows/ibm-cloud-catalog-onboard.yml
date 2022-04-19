@@ -183,4 +183,4 @@ jobs:
           echo "105: destroy"
           offeringName="Ecosystem IBM VPC OpenShift - 105"
           workspaceID=$(ibmcloud catalog offering get -c "$catalogName" -o "$offeringName" --output json | jq -r --arg version "${{ env.VERSION }}" '.kinds[] | select(.format_kind=="terraform").versions[] | select(.version==$version).validation.target.workspace_id')
-          ./scripts/cleanup.sh "$workspaceID"          
+          #./scripts/cleanup.sh "$workspaceID"          
