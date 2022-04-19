@@ -152,3 +152,26 @@ jobs:
           asset_path: ./automation/1-quickstart/220-dev-tools/${{ github.ref_name }}-220-dev-tools.tar.gz
           asset_name: ${{ github.ref_name }}-220-dev-tools.tar.gz
           asset_content_type: application/octet-stream                     
+
+      # Upload offering versions to the IBM catalog.  Need to first install the CLI, catalog management plugin then use the CLI to 
+      # upload the version to the offering and validate it.
+      - name: Upload to cloud catalog
+        id: setup-cli-and-upload
+        env: 
+          IBMCLOUD_API_KEY: ${{ secrets.API_KEY }}
+        run: |
+          curl -sL https://ibm.biz/idt-installer | bash
+          ibmcloud plugin install catalogs-management
+          ibmcloud plugin install schematics
+          ibmcloud plugin list
+          ibmcloud login --apikey "$IBMCLOUD_API_KEY" --no-region
+
+          VERSION=${{ env.VERSION }}
+
+          catalogName="Tech Zone FS Cloud Catalog"
+
+          echo "--------------------------------------------------------------------"
+          echo "Ecosystem IBM VPC OpenShift - 105"
+          offeringName="Ecosystem IBM VPC OpenShift - 105"
+          jq -n --arg IBMCLOUD_API_KEY "$IBMCLOUD_API_KEY" '{ "ibmcloud_api_key": $IBMCLOUD_API_KEY, "region": "au-syd", "resource_group_name": "cm-validate", "cluster_name": "cm-validate", "name_prefix": "cm-validate" }' > valid-values.json  
+          ./scripts/onboard_validate_publish.sh "$catalogName" "$offeringName" ${{ steps.ibm-vpc-openshift-asset-105.outputs.browser_download_url }} ${{ env.VERSION }} "cm-validate" 
