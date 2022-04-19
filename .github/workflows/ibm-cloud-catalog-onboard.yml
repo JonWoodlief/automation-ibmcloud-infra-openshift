@@ -16,7 +16,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Extracts the offering version number from the tag
+      # Extracts the offering version number from the tag - assumed tag format is vxx.xx.xx - catalog versions do not have letters
       - name: Determine version 
         run: echo "VERSION=$(echo ${{ github.ref_name }} | cut -c2-)" >> $GITHUB_ENV
 
@@ -175,3 +175,12 @@ jobs:
           offeringName="Ecosystem IBM VPC OpenShift - 105"
           jq -n --arg IBMCLOUD_API_KEY "$IBMCLOUD_API_KEY" '{ "ibmcloud_api_key": $IBMCLOUD_API_KEY, "region": "au-syd", "resource_group_name": "cm-validate", "cluster_name": "cm-validate", "name_prefix": "cm-validate" }' > valid-values.json  
           ./scripts/onboard_validate_publish.sh "$catalogName" "$offeringName" ${{ steps.ibm-vpc-openshift-asset-105.outputs.browser_download_url }} ${{ env.VERSION }} "cm-validate" 
+          
+          echo "--------------------------------------------------------------------"
+          echo "   Begin resource cleanup "
+          echo "--------------------------------------------------------------------"
+
+          echo "105: destroy"
+          offeringName="Ecosystem IBM VPC OpenShift - 105"
+          workspaceID=$(ibmcloud catalog offering get -c "$catalogName" -o "$offeringName" --output json | jq -r --arg version "${{ env.VERSION }}" '.kinds[] | select(.format_kind=="terraform").versions[] | select(.version==$version).validation.target.workspace_id')
+          ./scripts/cleanup.sh "$workspaceID"          
