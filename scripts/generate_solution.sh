@@ -100,7 +100,29 @@ generate_main_tf () {
         for bom in "${BOMS[@]}"; do
             echo "BOM = ${bom}";
 
-            echo "module \"${bom}\" {} " >> $output
+            autoTFvars=${SOLUTION_DIR}/${bom}/terraform/${bom}.auto.tfvars
+
+            echo "module \"${bom}\" {" >> $output
+            echo "   source = \"https://cm.globalcatalog.cloud.ibm.com/api/v1-beta/offering/source?archive=tgz&kind=terraform&name=gsi-${bom}&version=x.x.x\"" >>$output
+            # insert module variables using the auto.tfvars file from the BOM
+            while read -r line1; do
+                if [[ "${line1}" = "##"* ]] ; then
+                    echo "   ${line1}" >>$output
+                else
+                    # remove leading '#' 
+                    lineout=$(sed 's/^#//g' <<<${line1})
+
+                    variableName=$(sed 's~=".*~~' <<<${lineout})
+                    if [[ "${lineout}" = *"=\"\"" ]] ; then
+                        echo "   ${variableName} = ""var.""${variableName}" >> $output
+                        #echo "  ${variableName = var.${variableName}" >> $output
+                    else
+                        echo "   ${lineout}" >>$output
+                    fi     
+                fi    
+            done <${autoTFvars}
+            echo "}" >>$output
+            echo "" >>$output
         done    
     fi
 }
