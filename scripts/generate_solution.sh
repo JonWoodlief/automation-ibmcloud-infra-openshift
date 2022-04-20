@@ -87,6 +87,21 @@ generate_variables_tf () {
 # --------------------------------------------------------------
 #
 # --------------------------------------------------------------
+insert_module_serializer () {
+    dependent=${1}
+    outputFile=${2}
+
+    echo "module \"module-serializer-${bom}\" {" >>${outputFile}
+    echo "    source = \"./module-serializer\"" >>${outputFile}
+    echo "    region = var.region" >>${outputFile}
+    echo "    depends_on = [module.${bom}]" >>${outputFile}
+    echo "}" >>${outputFile}
+    echo "" >>${outputFile}
+} 
+
+# --------------------------------------------------------------
+#
+# --------------------------------------------------------------
 generate_main_tf () {
     SOLUTION_DIR=${1}
     echo "generating main.tf file - ${SOLUTION_DIR}"
@@ -123,6 +138,8 @@ generate_main_tf () {
             done <${autoTFvars}
             echo "}" >>$output
             echo "" >>$output
+
+            insert_module_serializer ${bom} ${output}
         done    
     fi
 }
