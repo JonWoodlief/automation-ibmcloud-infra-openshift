@@ -195,6 +195,8 @@ generate_module_serializer () {
 # ---------------------------------------------------------------------------------------------------
 # begin main
 #   $1 - the repo root directory name where a directory names "automation" exists with the flavors 
+#   $2 - target catalog name
+#   $3 - version string 
 # ---------------------------------------------------------------------------------------------------
 
 ROOT_DIR=${1}/automation
