@@ -110,6 +110,9 @@ insert_module_serializer () {
 # -----------------------------------------------------------------------------
 generate_main_tf () {
     SOLUTION_DIR=${1}
+    CATALOG_NAME=${2}
+    VERSION=${3}
+
     echo "generating main.tf file - ${SOLUTION_DIR}"
     
     BOMS=($(find "${SOLUTION_DIR}" -type d -maxdepth 1 | grep "${SOLUTION_DIR}/" | sed -E "s~${SOLUTION_DIR}/~~g" | sort ))
@@ -118,13 +121,23 @@ generate_main_tf () {
     else
         echo ${BOMS[@]}
         output=${SOLUTION_DIR}/"main.tf"
+
+        # to assit with lookup of offerings by programmatic name get a listing from the catalog of all of its 
+        # offerings and save it so that we do not do it more than once.
+        ibmcloud catalog offerings  --catalog "${CATALOG_NAME}" --output json > catalog.json
+
         for bom in "${BOMS[@]}"; do
             echo "BOM = ${bom}";
 
             autoTFvars=${SOLUTION_DIR}/${bom}/terraform/${bom}.auto.tfvars
 
             echo "module \"${bom}\" {" >> $output
-            echo "   source = \"https://cm.globalcatalog.cloud.ibm.com/api/v1-beta/offering/source?archive=tgz&kind=terraform&name=gsi-${bom}&version=x.x.x\"" >>$output
+            NAME="${bom}"
+            # lookup a version of an offering by its programatic name and version to get its catalog source url
+            SOURCE_URL=`cat catalog.json | jq -r --arg name "${NAME}" --arg version "${VERSION}" '.resources[] | select(.name==$name).kinds[] | select(.format_kind=="terraform").versions[] | select(.version==$version).metadata.source_url'`
+            echo "source=${SOURCE_URL}"
+            echo "   source = \"${SOURCE_URL}\"" >>$output
+            
             # insert module variables using the auto.tfvars file from the BOM
             while read -r line1; do
                 if [[ "${line1}" = "##"* ]] ; then
@@ -184,7 +197,9 @@ generate_module_serializer () {
 #   $1 - the repo root directory name where a directory names "automation" exists with the flavors 
 # ---------------------------------------------------------------------------------------------------
 
-ROOT_DIR=$1/automation
+ROOT_DIR=${1}/automation
+CATALOG_NAME=${2}
+VERSION=${3}
 echo "Running from directory" $ROOT_DIR ; echo ""
 
 FLAVORS=($(find "${ROOT_DIR}" -type d -maxdepth 1 | grep "${ROOT_DIR}/" | sed -E "s~${ROOT_DIR}/~~g" | sort ))
@@ -200,7 +215,7 @@ for flavor in "${FLAVORS[@]}"; do
     generate_variables_tf "${ROOT_DIR}/${flavor}"
 
     # create main.tf
-    generate_main_tf "${ROOT_DIR}/${flavor}"
+    generate_main_tf "${ROOT_DIR}/${flavor}" "${CATALOG_NAME}" "${VERSION}"
 
     # create the module serializer terraform
     generate_module_serializer "${ROOT_DIR}/${flavor}"
