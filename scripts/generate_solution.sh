@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# -----------------------------------------------------------------------------------------------------
+#   extract a variable definition from a larger terraform file.  write the single definition to a temp
+#   file that will be processed by the caller.
+# -----------------------------------------------------------------------------------------------------
 extract_variable () {
     target=${1}
     variablesList=${2}
@@ -27,9 +31,10 @@ extract_variable () {
     done <${variablesList}
 }    
 
-# --------------------------------------------------------------
-#
-# --------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------
+#   generaate a variables.tf file that is a consolidation of the variables defined in the BOMs in the
+#   the auto.tfvars files.
+# -----------------------------------------------------------------------------------------------------
 generate_variables_tf () {
     SOLUTION_DIR=${1}
     echo "generating variables.tf file - ${SOLUTION_DIR}"
@@ -84,9 +89,10 @@ generate_variables_tf () {
     fi
 }
 
-# --------------------------------------------------------------
-#
-# --------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
+#   insert terrafrom that invokes the module serializer code.  do this inbetween BOMs so that they wait for 
+#   each one to finish before the next one runs.
+# ----------------------------------------------------------------------------------------------------------
 insert_module_serializer () {
     dependent=${1}
     outputFile=${2}
@@ -99,9 +105,9 @@ insert_module_serializer () {
     echo "" >>${outputFile}
 } 
 
-# --------------------------------------------------------------
-#
-# --------------------------------------------------------------
+# -----------------------------------------------------------------------------
+#   generate the main.tf file based on the BOM directories that are present.
+# -----------------------------------------------------------------------------
 generate_main_tf () {
     SOLUTION_DIR=${1}
     echo "generating main.tf file - ${SOLUTION_DIR}"
@@ -130,7 +136,6 @@ generate_main_tf () {
                     variableName=$(sed 's~=".*~~' <<<${lineout})
                     if [[ "${lineout}" = *"=\"\"" ]] ; then
                         echo "   ${variableName} = ""var.""${variableName}" >> $output
-                        #echo "  ${variableName = var.${variableName}" >> $output
                     else
                         echo "   ${lineout}" >>$output
                     fi     
@@ -144,10 +149,9 @@ generate_main_tf () {
     fi
 }
 
-
-# --------------------------------------------------------------
+# --------------------------------------------------------------------------
 #   generate the files that make up the module serializer terraform code
-# --------------------------------------------------------------
+# --------------------------------------------------------------------------
 generate_module_serializer () {
     # save where we start this run.
     current_dir=$PWD
@@ -175,10 +179,10 @@ generate_module_serializer () {
     cd ${current_dir}
 }
 
-# --------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 # begin main
 #   $1 - the repo root directory name where a directory names "automation" exists with the flavors 
-# --------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------
 
 ROOT_DIR=$1/automation
 echo "Running from directory" $ROOT_DIR ; echo ""
