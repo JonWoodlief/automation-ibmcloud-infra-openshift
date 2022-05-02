@@ -11,5 +11,5 @@ module eco110 {
 }
 
 module eco130 {
-    source = "https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/offering/source?archive=tgz&kind=terraform&name=gsi-management-vpc-openshift&version=0.0.3"
+    source = "https://cm.globalcatalog.test.cloud.ibm.com/api/v1-beta/offering/source?archive=tgz&kind=terraform&name=ecosystem-management-vpc-openshift&version=0.0.3"
 }
